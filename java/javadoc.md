@@ -47,10 +47,34 @@ public [final] class [ClassName] { ... }
 
 ---
 
-## 2. Public Method Documentation (STRICT)
+## 2. Code Organization (Section Separators)
+Use section separators to visually group related methods (e.g., Constants, Static Utils, Logic, Getters/Setters).
+
+### 2.1 The Style
+Do not use "Box Style" (closed borders). Use the open-bar style for cleaner visuals.
+
+```text
+    /*
+     * -----------------------------------------------------------------------------------------------------------------
+     * SECTION_NAME (UPPERCASE)
+     * -----------------------------------------------------------------------------------------------------------------
+     */
+```
+
+### 2.2 Common Sections
+* `CONSTANTS & FIELDS`
+* `CONSTRUCTORS`
+* `STATIC FACTORIES`
+* `CORE LOGIC`
+* `INTERNAL HELPERS`
+* `OTHERS`
+
+---
+
+## 3. Public Method Documentation (STRICT)
 Every public method **MUST** follow this extended schema. Use the optional sections only when necessary.
 
-### 2.1 The Schema
+### 3.1 The Schema
 ```text
 /**
  * [VERB_3RD_PERSON] [THE_SUBJECT] [CONTEXT/CONDITION].
@@ -75,7 +99,7 @@ Every public method **MUST** follow this extended schema. Use the optional secti
  */
 ```
 
-### 2.2 Filling Guidelines
+### 3.2 Filling Guidelines
 * **Verbs:** Always start with a **3rd person singular** verb (e.g., `Checks`, `Calculates`, `Saves`). **DO NOT** use "Check", "Return", or "This method...".
 * **Formatting:** Wrap keywords, class names, and boolean values in code tags: `{@code null}`, `{@code true}`, `{@code String}`.
 * **Code Blocks:** Always use the `<pre>{@code ... }</pre>` pattern to prevent HTML escaping issues with Generics.
@@ -84,7 +108,7 @@ Every public method **MUST** follow this extended schema. Use the optional secti
     * **@return:** Explicitly state `Returns {@code null} if...` or `(never {@code null})`.
 * **Generics:** If the method signature contains `<T>`, you **MUST** include the `@param <T>` tag.
 
-### 2.3 Reference Example (The Gold Standard)
+### 3.3 Reference Example (The Gold Standard)
 Use this example as the benchmark for quality and style.
 
 ```text
@@ -113,15 +137,15 @@ public static <T> T instantiateClass(Class<T> clazz) { ... }
 
 ---
 
-## 3. Private / Internal Method Documentation
+## 4. Private / Internal Method Documentation
 Private helper methods follow a relaxed documentation standard. The goal is maintainability, not formal contract.
 
-### 3.1 The Rules
+### 4.1 The Rules
 1.  **Format:** Use Javadoc block `/** ... */` (for IDE hover support).
 2.  **No Tags:** Do **NOT** use `@param`, `@return` unless necessary for complex algorithms.
 3.  **Focus:** Explain **"Why"** and **"Assumptions"** (e.g., "Assumes input is non-null", "Used by method X").
 
-### 3.2 Template & Example
+### 4.2 Template & Example
 ```text
 /**
  * Helper for {@link #publicMethod()}.
