@@ -40,15 +40,15 @@ public [final] class [ClassName] { ... }
 
 ### 1.2 Filling Guidelines
 * **Header:** Use the simple format: `/* Created by Truong Ngo (2026). */` before the package declaration.
-* **Summary:** Start with a Noun Phrase (e.g., `Manager for...`, `Controller handling...`, `Entity representing...`).
+* **Summary:** Start with a Noun Phrase (e.g., `Manager for...`, `Controller handling...`).
 * **Metadata:**
-    * `@author`: Always `Truong Ngo`.
-    * `@version`: Matches the project version.
+  * `@author`: Always `Truong Ngo`.
+  * `@version`: Matches the project version.
 
 ---
 
 ## 2. Code Organization (Section Separators)
-Use section separators to visually group related methods (e.g., Constants, Static Utils, Logic, Getters/Setters).
+Use section separators to visually group related members. Do not use "Box Style".
 
 ### 2.1 The Style
 Do not use "Box Style" (closed borders). Use the open-bar style for cleaner visuals.
@@ -61,20 +61,82 @@ Do not use "Box Style" (closed borders). Use the open-bar style for cleaner visu
      */
 ```
 
-### 2.2 Common Sections
-* `CONSTANTS & FIELDS`
-* `CONSTRUCTORS`
-* `STATIC FACTORIES`
-* `CORE LOGIC`
-* `INTERNAL HELPERS`
-* `OTHERS`
+### 2.1 The Style
+Do not use "Box Style" (closed borders). Use the open-bar style for cleaner visuals.
 
 ---
 
-## 3. Public Method Documentation (STRICT)
-Every public method **MUST** follow this extended schema. Use the optional sections only when necessary.
+## 3. Fields & Constants Documentation
+Document public/protected fields and constants clearly. Private fields can use minimal documentation.
 
-### 3.1 The Schema
+### 3.1 Constants (static final)
+```text
+    /**
+     * [DESCRIPTION] (Unit of measurement if applicable).
+     * @see [RelatedConstant]
+     */
+    public static final int DEFAULT_TIMEOUT_MS = 5000;
+```
+
+### 3.2 Fields (Properties)
+```text
+    /**
+     * [DESCRIPTION].
+     * <p>
+     * [OPTIONAL: STATE constraints, e.g., "Always non-null after init"].
+     * </p>
+     */
+    private final String name;
+```
+
+---
+
+## 4. Constructors & Static Blocks
+
+### 4.1 Constructors
+Constructors follow the method style but focus on "Initialization".
+
+```text
+    /**
+     * Constructs a new [ClassName] with [key_attributes].
+     *
+     * @param [paramName] [description]
+     * @throws [Exception] if validation fails (e.g., null check)
+     */
+    public ClassName(...) { ... }
+```
+
+**Special Case: Utility Classes**
+For `final` utility classes, document the private constructor explicitly:
+```text
+    /**
+     * Prevents instantiation of this utility class.
+     * @throws UnsupportedOperationException always
+     */
+    private ClassUtils() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+```
+
+### 4.2 Static Initializer Blocks
+Since Javadoc ignores static blocks, use a standard block comment `/* ... */` immediately before the block.
+
+```text
+    /*
+     * Initializes the static cache/mapping.
+     * Loads configuration from [Source] safely.
+     */
+    static {
+        // ... logic
+    }
+```
+
+---
+
+## 5. Public Method Documentation (STRICT)
+Every public method **MUST** follow this extended schema.
+
+### 5.1 The Schema
 ```text
 /**
  * [VERB_3RD_PERSON] [THE_SUBJECT] [CONTEXT/CONDITION].
@@ -99,24 +161,20 @@ Every public method **MUST** follow this extended schema. Use the optional secti
  */
 ```
 
-### 3.2 Filling Guidelines
-* **Verbs:** Always start with a **3rd person singular** verb (e.g., `Checks`, `Calculates`, `Saves`). **DO NOT** use "Check", "Return", or "This method...".
-* **Formatting:** Wrap keywords, class names, and boolean values in code tags: `{@code null}`, `{@code true}`, `{@code String}`.
-* **Code Blocks:** Always use the `<pre>{@code ... }</pre>` pattern to prevent HTML escaping issues with Generics.
-* **Nullability:**
-    * **@param:** Explicitly state `(may be {@code null})` or `(must not be {@code null})`.
-    * **@return:** Explicitly state `Returns {@code null} if...` or `(never {@code null})`.
-* **Generics:** If the method signature contains `<T>`, you **MUST** include the `@param <T>` tag.
+### 5.2 Filling Guidelines
+* **Verbs:** Start with **3rd person singular** (e.g., `Checks`, `Calculates`). **DO NOT** use "Check", "Return".
+* **Formatting:** Wrap keywords in code tags: `{@code null}`, `{@code true}`, `{@code String}`.
+* **Code Blocks:** Always use `<pre>{@code ... }</pre>`.
+* **Nullability:** Explicitly state `(may be {@code null})` or `Returns {@code null} if...`.
+* **Generics:** Include `@param <T>` if applicable.
 
-### 3.3 Reference Example (The Gold Standard)
-Use this example as the benchmark for quality and style.
-
+### 5.3 Reference Example (The Gold Standard)
 ```text
 /**
  * Instantiates the specified class using its default constructor.
  * <p>
  * This wrapper handles accessibility checks and converts checked reflection
- * exceptions into unchecked {@link IllegalStateException} for cleaner client code.
+ * exceptions into unchecked {@link IllegalStateException}.
  * </p>
  *
  * <pre>{@code
@@ -137,24 +195,15 @@ public static <T> T instantiateClass(Class<T> clazz) { ... }
 
 ---
 
-## 4. Private / Internal Method Documentation
-Private helper methods follow a relaxed documentation standard. The goal is maintainability, not formal contract.
+## 6. Private / Internal Method Documentation
+Private helper methods follow a relaxed documentation standard.
 
-### 4.1 The Rules
-1.  **Format:** Use Javadoc block `/** ... */` (for IDE hover support).
-2.  **No Tags:** Do **NOT** use `@param`, `@return` unless necessary for complex algorithms.
-3.  **Focus:** Explain **"Why"** and **"Assumptions"** (e.g., "Assumes input is non-null", "Used by method X").
+### 6.1 The Rules
+1.  **Format:** Use Javadoc block `/** ... */`.
+2.  **No Tags:** Do **NOT** use `@param`, `@return` unless necessary.
+3.  **Focus:** Explain **"Why"** and **"Assumptions"**.
 
-### 4.2 Template & Example
-```text
-/**
- * Helper for {@link #publicMethod()}.
- * [Short description of specific logic].
- * [Note about assumptions, e.g., "Assumes input is non-null"].
- */
-```
-
-**Example:**
+### 6.2 Example
 ```text
 /**
  * Helper for {@link #resolveProxy(Object)}.
