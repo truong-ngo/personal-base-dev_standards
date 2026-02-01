@@ -152,7 +152,7 @@ Every public method **MUST** follow this extended schema.
  * }</pre>
  *
  * @param <T> [description_of_type] (REQUIRED if method defines a Type Parameter)
- * @param [paramName] the [subject] (may be {@code null} or constraints)
+ * @param [paramName] the [subject] (maybe {@code null} or constraints)
  * @return [RETURN_DESCRIPTION] - Explicitly state behavior for {@code null} results
  * @throws [ExceptionType] if [specific error condition occurs]
  * @see [RelatedClass#method]
@@ -165,7 +165,7 @@ Every public method **MUST** follow this extended schema.
 * **Verbs:** Start with **3rd person singular** (e.g., `Checks`, `Calculates`). **DO NOT** use "Check", "Return".
 * **Formatting:** Wrap keywords in code tags: `{@code null}`, `{@code true}`, `{@code String}`.
 * **Code Blocks:** Always use `<pre>{@code ... }</pre>`.
-* **Nullability:** Explicitly state `(may be {@code null})` or `Returns {@code null} if...`.
+* **Nullability:** Explicitly state `(maybe {@code null})` or `Returns {@code null} if...`.
 * **Generics:** Include `@param <T>` if applicable.
 
 ### 5.3 Reference Example (The Gold Standard)
@@ -212,3 +212,28 @@ Private helper methods follow a relaxed documentation standard.
  */
 private static Class<?> resolveHibernateProxy(Object o) { ... }
 ```
+
+## 7. Inline Documentation (Inside Methods)
+Comments inside the method body explain the **logic flow** and **"Why"** decisions, not the obvious syntax.
+
+### 7.1 The Rules
+1.  **Language:** English only.
+2.  **Style:** Use `//` for all inline comments. Do not use `/* ... */` block styles inside methods (reserved for commenting out code).
+3.  **Placement:** Place the comment **on the line above** the code it describes, indented to match the code.
+4.  **Steps:** Number the logical steps (1, 2, 3...) if the algorithm is sequential/long.
+5.  **Keywords:** Use uppercase keywords for emphasis:
+  * `// NOTE:` For important context or limitations.
+  * `// TODO:` For future work (followed by Jira ticket if applicable).
+  * `// FIXME:` For known bugs/hacks.
+
+### 7.2 Example
+```text
+// 1. Check cache first
+Object cached = cache.get(key);
+if (cached != null) {
+    return cached;
+}
+
+// 2. Fallback to database
+// NOTE: This operation is expensive, ensure timeout is set.
+Object result = database.load(key);
